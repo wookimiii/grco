@@ -1,5 +1,6 @@
 #!/bin/bash
-BRANCHES=$(git branch -r | grep $1 | grep -v HEAD | awk '{ gsub(/remotes\//,""); print}' | awk '{ gsub(/\*\ /,""); print}' | cut -d'/' -f2- | sort -u)
+BRANCHES=$(git branch -ra | grep $1 | grep -v HEAD | awk '{ gsub(/remotes\//,""); print}' | awk '{ gsub(/\*\ /,""); print}' | awk '{ gsub(/remotes\/origin\//,""); print}' | cut -d'/' -f2- | tr " " "\n" | sort -u | awk '/./')
+
 NUM=$(echo "$BRANCHES" | wc -l)
 
 # check for empty
@@ -10,8 +11,7 @@ fi
 
 if [ $NUM -eq 1 ]
 then
-    branch=$(echo $BRANCHES | awk '{ gsub(/remotes\/origin\//,""); print}')
-    git checkout $branch
+    git checkout $BRANCHES
 fi
 
 list=()
@@ -20,7 +20,7 @@ if [ $NUM -gt 1 ]
 then
     while read -r branch; do
         (( i++ ))
-        echo "$i: $branch"
+        echo "$i: ll $branch ll"
         list+=("$branch")
     done <<< "$BRANCHES"
     echo -n "Please choose one of the branches: "
