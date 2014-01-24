@@ -20,7 +20,7 @@ if [ $NUM -gt 1 ]
 then
     while read -r branch; do
         (( i++ ))
-        echo "$i: ll $branch ll"
+        echo "$i: $branch"
         list+=("$branch")
     done <<< "$BRANCHES"
     echo -n "Please choose one of the branches: "
