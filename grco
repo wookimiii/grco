@@ -1,0 +1,31 @@
+#!/bin/bash
+BRANCHES=$(git branch -r | grep $1 | grep -v HEAD | awk '{ gsub(/remotes\//,""); print}' | awk '{ gsub(/\*\ /,""); print}' | cut -d'/' -f2- | sort -u)
+NUM=$(echo "$BRANCHES" | wc -l)
+
+# check for empty
+if [ "X$BRANCHES" = "X" ]
+then
+    echo "No branch matches '$1'"
+fi
+
+if [ $NUM -eq 1 ]
+then
+    branch=$(echo $BRANCHES | awk '{ gsub(/remotes\/origin\//,""); print}')
+    git checkout $branch
+fi
+
+list=()
+i=0
+if [ $NUM -gt 1 ]
+then
+    while read -r branch; do
+        (( i++ ))
+        echo "$i: $branch"
+        list+=("$branch")
+    done <<< "$BRANCHES"
+    echo -n "Please choose one of the branches: "
+    read index
+    git checkout ${list[index-1]}
+fi
+
+exit 0
