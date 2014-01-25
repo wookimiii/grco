@@ -1,5 +1,5 @@
 #!/bin/bash
-BRANCHES=$(git branch -ra | grep $1 | grep -v HEAD | awk '{ gsub(/remotes\//,""); print}' | awk '{ gsub(/\*\ /,""); print}' | cut -d'/' -f2- | awk '{ gsub(/remotes\/origin\//,""); print}' | tr " " "\n" | sort -u | awk '/./')
+BRANCHES=$(git branch -ra | grep $1 | grep -v HEAD | awk '{ gsub(/remotes\//,""); print}' | awk '{ gsub(/\*\ /,""); print}' | awk '{ gsub(/[remotes\/]*origin\//,""); print}' | tr " " "\n" | sort -u | awk '/./')
 
 NUM=$(echo "$BRANCHES" | wc -l)
 
